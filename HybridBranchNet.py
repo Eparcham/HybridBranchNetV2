@@ -118,3 +118,5 @@ print(custom_network)
 
 # Test forward pass with dummy data
 dummy_input = torch.randn(1, 3, 224, 224)
+output = custom_network(dummy_input)  # Forward pass
+print("Output shape:", output.shape)
