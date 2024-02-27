@@ -1,3 +1,7 @@
+![Flowchart Description](Untitled.png)
+
+
+
 # Evaluation Results
 
 ## Table 1: Accuracy in CIFAR-100 Dataset and Comparison with Other Methods
