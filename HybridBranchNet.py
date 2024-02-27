@@ -147,7 +147,7 @@ for epoch in range(num_epochs):
     running_loss = 0.0
     for i, (inputs, labels) in enumerate(data_loader):
         inputs, labels = inputs.to(device), labels.to(device)  # Move inputs and labels to the device
-
+ 
         # Zero the parameter gradients
         optimizer.zero_grad()
 
