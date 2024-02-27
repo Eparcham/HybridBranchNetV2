@@ -15,3 +15,4 @@ def extract_graph_from_text(text):
     return graph
 text = "Apple is looking at buying U.K. startup for $1 billion"
 graph = extract_graph_from_text(text)
+ 
