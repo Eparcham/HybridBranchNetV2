@@ -2,6 +2,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torchvision import datasets, transforms
 
 # Defining Basic Block
 class BasicBlock(nn.Module):
@@ -109,14 +110,59 @@ class HybridBranchNet(nn.Module):
         x = self.final_layers(x)
         return x
 
-
 # Create the custom network instance
 custom_network = HybridBranchNet()
-
 # Display the network
 print(custom_network)
-
-# Test forward pass with dummy data
+# Test forward pass
 dummy_input = torch.randn(1, 3, 224, 224)
 output = custom_network(dummy_input)  # Forward pass
 print("Output shape:", output.shape)
+
+
+# Data preparation and augmentation
+transform = transforms.Compose([
+    transforms.RandomResizedCrop(224),
+    transforms.RandomHorizontalFlip(),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+])
+
+# Load the ImageNet dataset
+imagenet_data = datasets.ImageFolder('Parcham/train', transform=transform)
+data_loader = torch.utils.data.DataLoader(imagenet_data, batch_size=32, shuffle=True)
+
+
+criterion = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(custom_network.parameters(), lr=0.001)
+
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+custom_network.to(device)
+
+# Training loop
+num_epochs = 300  # Define the number of epochs you want to run
+
+for epoch in range(num_epochs):
+    custom_network.train()  # Set the model to training mode
+    running_loss = 0.0
+    for i, (inputs, labels) in enumerate(data_loader):
+        inputs, labels = inputs.to(device), labels.to(device)  # Move inputs and labels to the device
+
+        # Zero the parameter gradients
+        optimizer.zero_grad()
+
+        # Forward pass
+        outputs = custom_network(inputs)
+        loss = criterion(outputs, labels)
+
+        # Backward pass and optimize
+        loss.backward()
+        optimizer.step()
+
+        # Print statistics
+        running_loss += loss.item()
+        if i % 100 == 99:  # Print every 100 mini-batches
+            print(f'Epoch {epoch + 1}, Batch {i + 1}, Loss: {running_loss / 100:.4f}')
+            running_loss = 0.0
+
+print('Finished Training')
