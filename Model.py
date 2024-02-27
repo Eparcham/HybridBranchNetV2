@@ -21,17 +21,17 @@ class CustomCNNWithRL(nn.Module):
         self.flattened_size = self.compute_flattened_size()
 
         # Reinforcement Learning layer (placeholder)
-        self.rl = nn.Linear(256, 256)  # This layer would be more complex in a real RL scenario
+        self.rl = nn.Linear(256, 256)  #  RL scenario
 
         # Classification head
         self.fc1_class = nn.Linear(self.flattened_size, 1024)
         self.fc2_class = nn.Linear(1024, 512)
-        self.fc3_class = nn.Linear(512, 10)  # 10 classes for example
+        self.fc3_class = nn.Linear(512, 10)  # 10 classes
 
         # Captioning head
         self.fc1_caption = nn.Linear(self.flattened_size, 1024)
         self.lstm_caption = nn.LSTM(1024, 512, batch_first=True)
-        self.fc2_caption = nn.Linear(512, 1000)  # vocabulary size for example
+        self.fc2_caption = nn.Linear(512, 1000)  # vocabulary size
 
         # Dropout layer
         self.dropout = nn.Dropout(0.5)
@@ -68,8 +68,7 @@ class CustomCNNWithRL(nn.Module):
         x_caption = x_caption.squeeze(1)
         caption_output = self.fc2_caption(x_caption)
 
-        # Apply RL layer (here it's just a placeholder for a real RL algorithm)
-        # In a real scenario, the RL layer would modify these outputs based on external rewards
+        # Apply RL layer
         rl_class_output = self.rl(class_output)
         rl_caption_output = self.rl(caption_output)
 

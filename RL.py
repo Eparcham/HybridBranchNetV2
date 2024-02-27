@@ -1,7 +1,6 @@
+import torch.nn.functional as F
 def reinforce_loss(output, target, reward):
     """
-    A simple reinforcement learning loss function that adjusts the loss based on a given reward.
-
     Args:
     output (torch.Tensor): The output from the model.
     target (torch.Tensor): The ground truth labels.
